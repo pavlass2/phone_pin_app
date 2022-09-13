@@ -7,6 +7,7 @@ import com.example.demo.phonenumber.requestmodel.ValidatePinRequest;
 import com.example.demo.phonenumber.service.PhoneNumberService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -26,7 +27,7 @@ public class PhoneNumberController {
     }
 
     @GetMapping(path = "/pin")
-    public String validatePin(@RequestBody ValidatePinRequest validatePinRequest) {
+    public String validatePin(@RequestBody @Validated ValidatePinRequest validatePinRequest) {
         log.info(
                 "Validate PIN request received for number {} {}.",
                 validatePinRequest.prefix(),
@@ -37,7 +38,7 @@ public class PhoneNumberController {
     }
 
     @PutMapping(path = "/pin")
-    public PhoneNumber changePin(@RequestBody PinChangeRequest pinChangeRequest) {
+    public PhoneNumber changePin(@RequestBody @Validated PinChangeRequest pinChangeRequest) {
         log.info(
                 "Change PIN request received for number {} {}.",
                 pinChangeRequest.prefix(),

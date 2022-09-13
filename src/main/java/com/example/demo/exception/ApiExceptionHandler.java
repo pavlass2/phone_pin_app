@@ -49,8 +49,9 @@ public class ApiExceptionHandler {
     public ResponseEntity<Object> handleMethodArgumentNotValidException(
             MethodArgumentNotValidException e
     ) {
+        String message = e.getFieldError() == null ? e.getMessage() : e.getFieldError().getDefaultMessage();
         ApiError apiError = new ApiError(
-                e.getMessage(),
+                message,
                 HttpStatus.NOT_FOUND,
                 ZonedDateTime.now()
         );

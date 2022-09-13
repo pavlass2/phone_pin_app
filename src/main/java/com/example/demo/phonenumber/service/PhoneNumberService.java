@@ -2,13 +2,11 @@ package com.example.demo.phonenumber.service;
 
 import com.example.demo.exception.ApiRequestException;
 import com.example.demo.phonenumber.PhoneNumberConstants;
-import com.example.demo.phonenumber.repository.PhoneNumberRepository;
 import com.example.demo.phonenumber.jpamodel.PhoneNumber;
+import com.example.demo.phonenumber.repository.PhoneNumberRepository;
 import com.example.demo.phonenumber.requestmodel.PinChangeRequest;
 import com.example.demo.phonenumber.requestmodel.ValidatePinRequest;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -46,9 +44,7 @@ public class PhoneNumberService {
     }
     private boolean isPinValid(PhoneNumber phoneNumber, String pin) {
         log.info("Validating PIN for phoneNumber {} {}", phoneNumber.getPrefix(), phoneNumber.getPhoneNumber());
-        boolean isValid = false;
-
-        isValid = pinEncoder.matches(pin, phoneNumber.getEncryptedPin());
+        boolean isValid = pinEncoder.matches(pin, phoneNumber.getEncryptedPin());
 
         log.info(
                 "PIN for phoneNumber {} {} is {}",
@@ -94,14 +90,6 @@ public class PhoneNumberService {
         if (newPin.equals(oldPin)) {
             ApiRequestException pinInvalidException = new ApiRequestException(PhoneNumberConstants.PIN_CHANGE_NEW_PIN_EQUALS_OLD_PIN);
             log.error(PhoneNumberConstants.PIN_CHANGE_NEW_PIN_EQUALS_OLD_PIN, pinInvalidException);
-            throw pinInvalidException;
-        }
-
-        // This should be done trough annotations in PinChangeRequest class but for some reason it doesn't work.
-        // TODO Fix annotations and remove this condition
-        if (newPin.length() != 4 || !StringUtils.isNumeric(newPin)) {
-            ApiRequestException pinInvalidException = new ApiRequestException(PhoneNumberConstants.PIN_CHANGE_NEW_PIN_DOES_NOT_FULFILL_REQUIREMENTS);
-            log.error(PhoneNumberConstants.PIN_CHANGE_NEW_PIN_DOES_NOT_FULFILL_REQUIREMENTS, pinInvalidException);
             throw pinInvalidException;
         }
 
